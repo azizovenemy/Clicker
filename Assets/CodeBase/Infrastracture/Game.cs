@@ -7,9 +7,9 @@ namespace CodeBase.Infrastracture
     {
         public GameStateMachine stateMachine;
 
-        public Game(ICoroutineRunner coroutineRunner, LoadingCurtain curtain)
+        public Game(ICoroutineRunner coroutineRunner, UI ui)
         {
-            stateMachine = new GameStateMachine(new SceneLoader(coroutineRunner), curtain);
+            stateMachine = new GameStateMachine(new SceneLoader(coroutineRunner), ui);
         }
     }
 }

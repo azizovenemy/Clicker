@@ -9,13 +9,13 @@ namespace CodeBase.Infrastracture
 
         private readonly Dictionary<Type, IExitableState> _states;
 
-        public GameStateMachine(SceneLoader sceneLoader, LoadingCurtain curtain) 
+        public GameStateMachine(SceneLoader sceneLoader, UI ui) 
         {
             _states = new Dictionary<Type, IExitableState>
             {
                 [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader),
-                [typeof(LoadLevelState)] = new LoadLevelState(this, sceneLoader, curtain),
-                [typeof(GameLoopState)] = new GameLoopState(this),
+                [typeof(LoadLevelState)] = new LoadLevelState(this, sceneLoader, ui),
+                [typeof(GameLoopState)] = new GameLoopState(this, ui),
             };
         }
 

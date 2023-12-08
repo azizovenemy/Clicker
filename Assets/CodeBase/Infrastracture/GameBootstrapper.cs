@@ -5,13 +5,13 @@ namespace CodeBase.Infrastracture
 {
     public class GameBootstrapper : MonoBehaviour, ICoroutineRunner
     {
-        public LoadingCurtain Curtain;
+        public UI UI;
 
         private Game _game;
 
         void Awake()
         {
-            _game = new Game(this, Curtain);
+            _game = new Game(this, UI);
             _game.stateMachine.Enter<BootstrapState>();
 
             DontDestroyOnLoad(this);

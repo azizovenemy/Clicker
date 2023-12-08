@@ -5,7 +5,6 @@ namespace CodeBase.Infrastracture
 {
     public class BootstrapState : IState
     {
-        private const string Bootstrap = "Bootstrap";
         private readonly GameStateMachine _stateMachine;
         private SceneLoader _sceneLoader;
 
@@ -18,11 +17,11 @@ namespace CodeBase.Infrastracture
         public void Enter()
         {
             RegisterServices();
-            _sceneLoader.Load(Bootstrap, onLoaded: EnterLoadLevel);
+            _sceneLoader.Load(Constants.BootstrapSceneName, onLoaded: EnterLoadLevel);
         }
 
         private void EnterLoadLevel() => 
-            _stateMachine.Enter<LoadLevelState, string>("MainScene");
+            _stateMachine.Enter<LoadLevelState, string>(Constants.MainSceneName);
 
         private void RegisterServices() => 
             Debug.Log("Register Services from BootstrapState");

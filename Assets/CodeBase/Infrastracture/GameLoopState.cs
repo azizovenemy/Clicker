@@ -2,17 +2,18 @@
 {
     public class GameLoopState : IState
     {
-        public GameLoopState(GameStateMachine stateMachine)
+        private readonly GameStateMachine _stateMachine;
+        private UI _ui;
+
+        public GameLoopState(GameStateMachine stateMachine, UI hud)
         {
-            
+            _stateMachine = stateMachine;
+            _ui = hud;
         }
 
-        public void Enter()
-        {
-        }
+        public void Enter() => 
+            _ui.Show(_ui.HUDCanvas);
 
-        public void Exit()
-        {
-        }
+        public void Exit() { }
     }
 }

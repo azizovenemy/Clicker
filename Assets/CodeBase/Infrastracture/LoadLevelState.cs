@@ -6,28 +6,27 @@ namespace CodeBase.Infrastracture
     {
         private readonly GameStateMachine _stateMachine;
         private readonly SceneLoader _sceneLoader;
-        private readonly LoadingCurtain _curtain;
+        private readonly UI _ui;
 
-        public LoadLevelState(GameStateMachine stateMachine, SceneLoader sceneLoader, LoadingCurtain curtain)
+        public LoadLevelState(GameStateMachine stateMachine, SceneLoader sceneLoader, UI ui)
         {
             _stateMachine = stateMachine;
             _sceneLoader = sceneLoader;
-            _curtain = curtain;
+            _ui = ui;
         }
 
         public void Enter(string sceneName)
         {
-            _curtain.Show();
+            _ui.Show(_ui.LoadingCanvas);
             _sceneLoader.Load(sceneName, onLoaded: OnLoaded);
         }
 
         public void Exit() =>
-            _curtain.Hide();
+            _ui.Hide();
 
         private void OnLoaded()
         {
             Debug.Log("Level loaded");
-
             _stateMachine.Enter<GameLoopState>();
         }
     }
