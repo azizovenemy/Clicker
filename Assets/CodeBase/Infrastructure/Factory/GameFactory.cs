@@ -1,8 +1,17 @@
 ﻿using System.Collections.Generic;
+using CodeBase.Enemy;
 using CodeBase.Infrastructure.AssetManagement;
 using CodeBase.Infrastructure.Services.PersistentProgress;
+using CodeBase.Infrastructure.Services.SaveLoad;
+using CodeBase.Infrastructure.Services.StaticData;
+using CodeBase.Logic;
+using CodeBase.Logic.Settings;
+using CodeBase.Player;
+using CodeBase.StaticData;
+using CodeBase.UI;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 
 namespace CodeBase.Infrastructure.Factory
 {
@@ -11,21 +20,54 @@ namespace CodeBase.Infrastructure.Factory
         public List<ISavedProgressReader> ProgressReaders { get; } = new();
         public List<ISavedProgress> ProgressWriters { get; } = new();
 
+        private ActorUI _actor;
         private readonly IAssetProvider _assets;
+        private readonly IStaticDataService _staticData;
+        private readonly ISaveLoadService _saveLoadService;
 
-        public GameFactory(IAssetProvider assets)
+        public GameFactory(IAssetProvider assets, IStaticDataService staticData, ISaveLoadService saveLoadService)
         {
             _assets = assets;
+            _staticData = staticData;
+            _saveLoadService = saveLoadService;
         }
 
-        public void CreatePlayer() => 
-            InstantiateRegistered(Constants.PlayerPath);
-
-        public void CreateUI()
+        public void InitSpawners()
         {
-            var uiPrefab = InstantiateRegistered(Constants.UIPath);
+            var sceneKey = SceneManager.GetActiveScene().name;
+            LevelData levelData = _staticData.ForLevel(sceneKey);
+            foreach (EnemySpawnerData enemySpawner in levelData.EnemySpawners)
+            {
+                CreateSpawner(enemySpawner.Position);
+            }
+        }
 
-            BindCameraStack(uiPrefab);
+        public GameObject InitEnemy(EEnemyTypeId typeId, Transform parent, int index)
+        {
+            EnemyData enemyData = _staticData.ForEnemy(typeId);
+            GameObject enemyObject = Object.Instantiate(enemyData.Prefab, parent.transform.position.AddY(0.5f), Quaternion.identity, parent);
+
+            var health = enemyObject.GetComponent<EnemyHealth>();
+            enemyObject.GetComponentInChildren<ActorUI>().Construct(health, enemyData.Name);
+            enemyObject.GetComponent<EnemyDeath>().deathFx = enemyData.DeathFx;
+
+            var enemy = enemyObject.GetComponent<BaseEnemy>();
+            health.Max = enemy.CalculateMaxHealth(index);
+            health.Current = health.Max;
+            
+            return enemyObject;
+        }
+
+        public void InitPlayer()
+        {
+            InstantiateRegistered(Constants.PlayerPath);
+        }
+
+        public void InitHUD()
+        {
+            var hud = InstantiateRegistered(Constants.UIPath);
+            
+            BindCameraStack(hud);
         }
 
         public void Cleanup()
@@ -34,9 +76,22 @@ namespace CodeBase.Infrastructure.Factory
             ProgressWriters.Clear();
         }
 
+        private void CreateSpawner(Vector3 at)
+        {
+            var spawner = InstantiateRegistered(Constants.SpawnerPath, at);
+            spawner.GetComponent<EnemySpawner>().Construct(this);
+        }
+
         private GameObject InstantiateRegistered(string path)
         {
             var gameObject = _assets.Instantiate(path);
+            RegisterProgressWatchers(gameObject);
+            return gameObject;
+        }
+        
+        private GameObject InstantiateRegistered(string path, Vector3 at)
+        {
+            var gameObject = _assets.Instantiate(path, at);
             RegisterProgressWatchers(gameObject);
             return gameObject;
         }
@@ -54,7 +109,7 @@ namespace CodeBase.Infrastructure.Factory
             
             ProgressReaders.Add(progressReader);
         }
-
+        
         private void BindCameraStack(GameObject uiPrefab) => 
             Camera.main.GetUniversalAdditionalCameraData().cameraStack.Add(uiPrefab.GetComponentInChildren<Camera>());
     }

@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6128454120b40cfa340a80c12d64827, type: 3}
+  m_Name: Azizov
+  m_EditorClassIdentifier: 
+  EnemyTypeId: 0
+  Name: Azizov
+  Prefab: {fileID: 2529305199097685566, guid: 49660f9d9921fdb488836811af5cebbd, type: 3}
+  DeathFx: {fileID: 0}

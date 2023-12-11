@@ -6,11 +6,18 @@ namespace CodeBase.Infrastructure
     {
         [SerializeField] private GameBootstrapper bootstrapperPrefab;
         
-        private void Awake()
+        private void OnEnable()
         {
             var bootstrapper = FindObjectOfType<GameBootstrapper>();
+            var ui = GameObject.Find("INTERFACE");
+            var curtain = FindObjectOfType<LoadingCurtain>();
 
-            if (bootstrapper) return;
+            if (bootstrapper && ui && curtain)
+            {
+                Destroy(ui);
+                Destroy(curtain);
+                Destroy(bootstrapper);
+            }
 
             Instantiate(bootstrapperPrefab);
         }

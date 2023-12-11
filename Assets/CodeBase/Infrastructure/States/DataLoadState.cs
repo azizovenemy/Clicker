@@ -1,6 +1,9 @@
-﻿using CodeBase.Data;
+﻿using System.Collections.Generic;
+using CodeBase.Data;
 using CodeBase.Infrastructure.Services.PersistentProgress;
 using CodeBase.Infrastructure.Services.SaveLoad;
+using CodeBase.StaticData;
+using UnityEngine;
 
 namespace CodeBase.Infrastructure.States
 {
@@ -10,7 +13,8 @@ namespace CodeBase.Infrastructure.States
         private readonly IPersistentProgressService _progressService;
         private readonly ISaveLoadService _saveLoadService;
 
-        public DataLoadState(GameStateMachine stateMachine, IPersistentProgressService progressService, ISaveLoadService saveLoadService)
+        public DataLoadState(GameStateMachine stateMachine, IPersistentProgressService progressService,
+            ISaveLoadService saveLoadService)
         {
             _stateMachine = stateMachine;
             _progressService = progressService;
@@ -20,18 +24,37 @@ namespace CodeBase.Infrastructure.States
         public void Enter()
         {
             LoadProgressOrInitNew();
-            
+
             _stateMachine.Enter<LoadLevelState, string>(Constants.MainSceneName);
         }
 
         public void Exit()
         {
+            Debug.Log(_progressService.Progress.ToJson());
         }
 
-        private void LoadProgressOrInitNew() => 
+        private void LoadProgressOrInitNew() =>
             _progressService.Progress = _saveLoadService.LoadProgress() ?? NewProgress();
 
-        private PlayerProgress NewProgress() => 
-            new(currentEnemyIndex: 1, currentEnemyHp: 10, balance: 100);
+        private PlayerProgress NewProgress() =>
+            new()
+            {
+                currentEnemyData =
+                {
+                    currentHp = 10,
+                    index = 1
+                },
+                playerData =
+                {
+                    balance = 10,
+                    damage = 1,
+                    upgradesData =
+                    {
+                        new UpgradesData(EUpgradeTypeId.AutoDamageIncrease, 1),
+                        new UpgradesData(EUpgradeTypeId.PlayerDamageIncrease, 1),
+                        new UpgradesData(EUpgradeTypeId.MoneyRewardIncrease, 1)
+                    }
+                }
+            };
     }
 }

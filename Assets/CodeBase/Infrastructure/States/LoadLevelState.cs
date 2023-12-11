@@ -1,5 +1,6 @@
 ﻿using CodeBase.Infrastructure.Factory;
 using CodeBase.Infrastructure.Services.PersistentProgress;
+using UnityEngine;
 
 namespace CodeBase.Infrastructure.States
 {
@@ -26,14 +27,15 @@ namespace CodeBase.Infrastructure.States
             _gameFactory.Cleanup();
             _sceneLoader.Load(sceneName, onLoaded: OnLoaded);
         }
-
-        public void Exit() =>
-            _curtain.Hide();
+        
+        public void Exit() { }
 
         private void OnLoaded()
         {
             InitGameWorld();
             InformProgressReaders();
+            
+            _curtain.Hide();
             _stateMachine.Enter<GameLoopState>();
         }
 
@@ -45,8 +47,9 @@ namespace CodeBase.Infrastructure.States
 
         private void InitGameWorld()
         {
-            _gameFactory.CreateUI();
-            _gameFactory.CreatePlayer();
+            _gameFactory.InitHUD();
+            _gameFactory.InitPlayer();
+            _gameFactory.InitSpawners();
         }
     }
 }

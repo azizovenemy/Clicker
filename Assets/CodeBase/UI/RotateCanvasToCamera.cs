@@ -1,14 +1,10 @@
-using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace CodeBase.UI
 {
-    public class RotateCanvasToCamera : MonoBehaviour
+    class RotateCanvasToCamera : MonoBehaviour
     {
-        private void Start()
-        {
-            // ReSharper disable once PossibleNullReferenceException
-            transform.LookAt(Camera.main.transform);
-        }
+        private void Start() => 
+            transform.LookAt(transform.position + Camera.main.transform.rotation * Vector3.forward, Camera.main.transform.rotation * Vector3.up);
     }
 }

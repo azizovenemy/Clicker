@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using CodeBase.Infrastructure.Services;
 using CodeBase.Infrastructure.Services.PersistentProgress;
+using CodeBase.StaticData;
+using UnityEngine;
 
 namespace CodeBase.Infrastructure.Factory
 {
@@ -9,8 +11,11 @@ namespace CodeBase.Infrastructure.Factory
         List<ISavedProgressReader> ProgressReaders { get; }
         List<ISavedProgress> ProgressWriters { get; }
         
-        void CreatePlayer();
-        void CreateUI();
+        void InitSpawners();
+        void InitPlayer();
+        GameObject InitEnemy(EEnemyTypeId typeId, Transform parent, int index);
+        void InitHUD();
+        
         void Cleanup();
     }
 }

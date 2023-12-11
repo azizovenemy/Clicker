@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using CodeBase.Data;
+using CodeBase.Enemy;
 using CodeBase.Infrastructure.Services.PersistentProgress;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -13,42 +14,45 @@ namespace CodeBase.Player
         private float _balance;
         private float _currentEnemyHp;
 
-        private SaveType _saveType;
+        private Camera _camera;
+        private PlayerData _playerProgress;
 
         private void Awake()
         {
-            _saveType = new SaveType();
+            _camera = Camera.main;
         }
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
-                _saveType.SaveProgress();
+            if (!Input.GetMouseButtonDown(0)) return;
+            
+            var ray = _camera.ScreenPointToRay(Input.mousePosition);
+            if (!Physics.Raycast(ray, out var hit, 100)) return;
+
+            hit.transform.TryGetComponent<EnemyHealth>(out var component);
+            if (!component) return;
+            
+            component.TakeDamage(_playerProgress.damage);
         }
 
         public void UpdateProgress(PlayerProgress progress)
         {
-            progress.CurrentEnemyData.Index = 1;
-            progress.CurrentEnemyData.CurrentHP = 10;
+            progress.playerData.balance = 100;
         }
 
         public void LoadProgress(PlayerProgress progress)
         {
-            _levelIndex = progress.CurrentEnemyData.Index;
-            _currentEnemyHp = progress.CurrentEnemyData.CurrentHP;
-            _balance = progress.PlayerData.Balance;
-            Debug.Log(new StringBuilder().Append("Data loaded with balance : ")
-                .Append(_balance)
-                .Append(" and level : ")
-                .Append(_levelIndex)
-                .Append(" current Enemy health : ")
-                .Append(_currentEnemyHp)
-                .ToString());
+            _playerProgress = progress.playerData;
+            //DebugInfo();
         }
 
-        //private void OnApplicationQuit()
-        //{
-        //    _saveType.SaveProgress();
-        //}
+        private void DebugInfo()
+        {
+            Debug.Log(new StringBuilder().Append("Player data loaded with balance : ")
+                .Append(_playerProgress.balance)
+                .Append(" with damage : ")
+                .Append(_playerProgress.damage)
+                .ToString());
+        }
     }
 }
