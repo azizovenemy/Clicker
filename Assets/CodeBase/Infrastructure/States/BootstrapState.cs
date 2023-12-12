@@ -38,7 +38,7 @@ namespace CodeBase.Infrastructure.States
             RegisterStaticDataService();
             Container.RegisterSingle<IAssetProvider>(new AssetProvider());
             Container.RegisterSingle<IPersistentProgressService>(new PersistentProgressService());
-            Container.RegisterSingle<IGameFactory>(new GameFactory(Container.Single<IAssetProvider>(), Container.Single<IStaticDataService>(), Container.Single<ISaveLoadService>()));
+            Container.RegisterSingle<IGameFactory>(new GameFactory(Container.Single<IAssetProvider>(), Container.Single<IStaticDataService>()));
             Container.RegisterSingle<ISaveLoadService>(new SaveLoadService(Container.Single<IPersistentProgressService>(), Container.Single<IGameFactory>()));
         }
 

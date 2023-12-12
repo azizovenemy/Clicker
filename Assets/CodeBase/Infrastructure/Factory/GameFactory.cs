@@ -1,12 +1,9 @@
 ﻿using System.Collections.Generic;
+using CodeBase.UserInfo;
 using CodeBase.Enemy;
 using CodeBase.Infrastructure.AssetManagement;
 using CodeBase.Infrastructure.Services.PersistentProgress;
-using CodeBase.Infrastructure.Services.SaveLoad;
 using CodeBase.Infrastructure.Services.StaticData;
-using CodeBase.Logic;
-using CodeBase.Logic.Settings;
-using CodeBase.Player;
 using CodeBase.StaticData;
 using CodeBase.UI;
 using UnityEngine;
@@ -20,16 +17,14 @@ namespace CodeBase.Infrastructure.Factory
         public List<ISavedProgressReader> ProgressReaders { get; } = new();
         public List<ISavedProgress> ProgressWriters { get; } = new();
 
-        private ActorUI _actor;
+        private Balance _balance;
         private readonly IAssetProvider _assets;
         private readonly IStaticDataService _staticData;
-        private readonly ISaveLoadService _saveLoadService;
 
-        public GameFactory(IAssetProvider assets, IStaticDataService staticData, ISaveLoadService saveLoadService)
+        public GameFactory(IAssetProvider assets, IStaticDataService staticData)
         {
             _assets = assets;
             _staticData = staticData;
-            _saveLoadService = saveLoadService;
         }
 
         public void InitSpawners()
@@ -60,13 +55,17 @@ namespace CodeBase.Infrastructure.Factory
 
         public void InitPlayer()
         {
-            InstantiateRegistered(Constants.PlayerPath);
+            var player = InstantiateRegistered(Constants.PlayerPath);
+
+            player.GetComponent<Player>().Construct(_balance);
         }
 
         public void InitHUD()
         {
             var hud = InstantiateRegistered(Constants.UIPath);
-            
+
+            _balance = hud.GetComponentInChildren<Balance>();
+
             BindCameraStack(hud);
         }
 

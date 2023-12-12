@@ -6,16 +6,14 @@ using CodeBase.Infrastructure.Services.PersistentProgress;
 using Unity.VisualScripting;
 using UnityEngine;
 
-namespace CodeBase.Player
+namespace CodeBase.UserInfo
 {
     public class Player : MonoBehaviour, ISavedProgress
     {
-        private int _levelIndex;
-        private float _balance;
-        private float _currentEnemyHp;
-
         private Camera _camera;
         private PlayerData _playerProgress;
+
+        public void Construct(Balance balance) { }
 
         private void Awake()
         {
@@ -48,7 +46,8 @@ namespace CodeBase.Player
 
         private void DebugInfo()
         {
-            Debug.Log(new StringBuilder().Append("Player data loaded with balance : ")
+            Debug.Log(new StringBuilder()
+                .Append("Player data loaded with balance : ")
                 .Append(_playerProgress.balance)
                 .Append(" with damage : ")
                 .Append(_playerProgress.damage)

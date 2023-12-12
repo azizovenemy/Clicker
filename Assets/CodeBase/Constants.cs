@@ -15,9 +15,6 @@
         public const string ProgressKey = "Progress";
         
         public const float Epsilon = 0.001f;
-        
-        public const string Settings = "Settings";
-        public const string Upgrades = "Upgrades";
 
         public const int Increase = 10;
 
