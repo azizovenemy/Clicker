@@ -1,17 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using CodeBase.Data;
 using CodeBase.Infrastructure.Factory;
 using CodeBase.Infrastructure.Services.PersistentProgress;
 using CodeBase.StaticData;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace CodeBase.Enemy
 {
     public class EnemySpawner : MonoBehaviour, ISavedProgress
     {
-        public int CurrentEnemyIndex = 1;
+        public int CurrentEnemyIndex { get; private set; }
         public int CurrentEnemyMoneyReward;
-        
+        public GameObject CurrentEnemy { get; private set; }
+
         private EEnemyTypeId _typeId;
         
         private IGameFactory _gameFactory;
@@ -19,9 +22,9 @@ namespace CodeBase.Enemy
 
         private readonly Dictionary<EEnemyTypeId, Color32> _colors = new()
         {
-            { EEnemyTypeId.Cube, new Color32(17, 1, 180, 200) },
-            { EEnemyTypeId.Capsule, new Color32(180, 1, 17, 200) },
-            { EEnemyTypeId.Sphere, new Color32(1, 180, 17, 200) },
+            { EEnemyTypeId.Cube, new Color32(17, 1, 180, 255) },
+            { EEnemyTypeId.Capsule, new Color32(180, 1, 17, 255) },
+            { EEnemyTypeId.Sphere, new Color32(1, 180, 17, 255) },
         };
 
         public void Construct(IGameFactory gameFactory)
@@ -41,7 +44,7 @@ namespace CodeBase.Enemy
 
         private float CalculateReward()
         {
-            return CurrentEnemyIndex * Constants.Increase; //* uprageService.moneyIncrease;
+            return CurrentEnemyIndex * Constants.Increase; //* upgradesService.moneyIncrease;
         }
 
         public void LoadProgress(PlayerProgress progress)
@@ -55,9 +58,9 @@ namespace CodeBase.Enemy
         private void Spawn()
         {
             _typeId = ChooseEnemyTypeById(CurrentEnemyIndex);
-            var enemy = _gameFactory.InitEnemy(_typeId, transform, CurrentEnemyIndex);
-            enemy.GetComponent<MeshRenderer>().material.color = _colors[_typeId];
-            _enemyDeath = enemy.GetComponent<EnemyDeath>();
+            CurrentEnemy = _gameFactory.InitEnemy(_typeId, transform, CurrentEnemyIndex);
+            CurrentEnemy.GetComponent<MeshRenderer>().material.color = _colors[_typeId];
+            _enemyDeath = CurrentEnemy.GetComponent<EnemyDeath>();
             _enemyDeath.Happened += OnSlain;
         }
 

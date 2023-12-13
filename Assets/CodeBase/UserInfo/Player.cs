@@ -3,7 +3,8 @@ using System.Text;
 using CodeBase.Data;
 using CodeBase.Enemy;
 using CodeBase.Infrastructure.Services.PersistentProgress;
-using Unity.VisualScripting;
+using CodeBase.Logic.Upgrades;
+using CodeBase.StaticData;
 using UnityEngine;
 
 namespace CodeBase.UserInfo
@@ -12,16 +13,45 @@ namespace CodeBase.UserInfo
     {
         private Camera _camera;
         private PlayerData _playerProgress;
+        private EnemyHealth _enemy;
+        private EnemySpawner _spawner;
+        private float _time;
 
-        public void Construct(Balance balance) { }
+        public void Construct(EnemySpawner spawner)
+        {
+            _spawner = spawner;
+            _enemy = _spawner.CurrentEnemy.GetComponent<EnemyHealth>();
+        }
 
         private void Awake()
         {
             _camera = Camera.main;
+            _time = 0f;
         }
 
         private void Update()
         {
+            DamageRepeating();
+            
+            ApplyDamageOnClick();
+        }
+
+        public void UpdateProgress(PlayerProgress progress)
+        {
+            progress.playerData = _playerProgress;
+        }
+
+        public void LoadProgress(PlayerProgress progress)
+        {
+            _playerProgress = progress.playerData;
+            //DebugInfo();
+        }
+
+        private void ApplyDamageOnClick()
+        {
+            if (!_enemy)
+                _enemy = _spawner.CurrentEnemy.GetComponent<EnemyHealth>();
+            
             if (!Input.GetMouseButtonDown(0)) return;
             
             var ray = _camera.ScreenPointToRay(Input.mousePosition);
@@ -30,18 +60,20 @@ namespace CodeBase.UserInfo
             hit.transform.TryGetComponent<EnemyHealth>(out var component);
             if (!component) return;
             
-            component.TakeDamage(_playerProgress.damage);
+            _enemy.TakeDamage(_playerProgress.damage);
         }
 
-        public void UpdateProgress(PlayerProgress progress)
+        private void DamageRepeating()
         {
-            progress.playerData.balance = 100;
-        }
-
-        public void LoadProgress(PlayerProgress progress)
-        {
-            _playerProgress = progress.playerData;
-            //DebugInfo();
+            if (_enemy && Upgrades.Instance.FindExists(EUpgradeTypeId.AutoDamageIncrease))
+            {
+                _time += Time.deltaTime;
+                while(_time >= 1.0f) {
+                    _enemy.TakeDamage(Upgrades.Instance.GetUpgradeCount(EUpgradeTypeId.AutoDamageIncrease));
+                
+                    _time -= 1.0f;
+                }
+            }
         }
 
         private void DebugInfo()

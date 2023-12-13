@@ -1,9 +1,6 @@
-﻿using System;
-using CodeBase.StaticData;
+﻿using CodeBase.StaticData;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 namespace CodeBase.Logic.Upgrades
@@ -79,5 +76,16 @@ namespace CodeBase.Logic.Upgrades
 
         private void CalculateSellCost() => 
             _currentSellCost = Mathf.FloorToInt(_currentBuyCost / 1.5f);
+        
+        public bool GetCount(EUpgradeTypeId upgradeTypeId, out int upgradesCount)
+        {
+            upgradesCount = Count;
+            return UpgradeType == upgradeTypeId;
+        }
+
+        public bool IsExists(EUpgradeTypeId upgradeType)
+        {
+            return UpgradeType == upgradeType;
+        }
     }
 }

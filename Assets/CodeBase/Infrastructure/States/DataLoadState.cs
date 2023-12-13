@@ -40,7 +40,6 @@ namespace CodeBase.Infrastructure.States
             {
                 currentEnemyData =
                 {
-                    currentHp = 10,
                     index = 1
                 },
                 playerData =

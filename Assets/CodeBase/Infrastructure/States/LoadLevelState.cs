@@ -47,9 +47,9 @@ namespace CodeBase.Infrastructure.States
 
         private void InitGameWorld()
         {
+            _gameFactory.InitSpawners();
             _gameFactory.InitHUD();
             _gameFactory.InitPlayer();
-            _gameFactory.InitSpawners();
         }
     }
 }

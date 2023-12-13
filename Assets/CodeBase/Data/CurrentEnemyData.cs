@@ -6,6 +6,5 @@ namespace CodeBase.Data
     public class CurrentEnemyData
     {
         public int index;
-        public float currentHp;
     }
 }

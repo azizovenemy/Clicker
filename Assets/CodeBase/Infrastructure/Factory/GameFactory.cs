@@ -20,6 +20,7 @@ namespace CodeBase.Infrastructure.Factory
         private Balance _balance;
         private readonly IAssetProvider _assets;
         private readonly IStaticDataService _staticData;
+        private readonly List<EnemySpawner> _spawners = new();
 
         public GameFactory(IAssetProvider assets, IStaticDataService staticData)
         {
@@ -57,7 +58,7 @@ namespace CodeBase.Infrastructure.Factory
         {
             var player = InstantiateRegistered(Constants.PlayerPath);
 
-            player.GetComponent<Player>().Construct(_balance);
+            player.GetComponent<Player>().Construct(_spawners[0]);
         }
 
         public void InitHUD()
@@ -79,6 +80,8 @@ namespace CodeBase.Infrastructure.Factory
         {
             var spawner = InstantiateRegistered(Constants.SpawnerPath, at);
             spawner.GetComponent<EnemySpawner>().Construct(this);
+
+            _spawners.Add(spawner.GetComponent<EnemySpawner>());
         }
 
         private GameObject InstantiateRegistered(string path)
