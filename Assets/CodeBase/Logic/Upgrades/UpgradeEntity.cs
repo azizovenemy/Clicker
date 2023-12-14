@@ -1,4 +1,5 @@
 ﻿using CodeBase.StaticData;
+using CodeBase.UserInfo;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -41,10 +42,21 @@ namespace CodeBase.Logic.Upgrades
             sellButton.onClick.RemoveListener(OnSell);
         }
 
+        public bool GetCount(EUpgradeTypeId upgradeTypeId, out int upgradesCount)
+        {
+            Debug.Log(Count);
+            upgradesCount = Count;
+            return UpgradeType == upgradeTypeId;
+        }
+
+        public bool IsExists(EUpgradeTypeId upgradeType) =>
+            UpgradeType == upgradeType;
+
         private void OnSell()
         {
             if (Count <= 0) return;
-            
+
+            Balance.Instance.IncreaseBalance(_currentSellCost);
             Count--;
             CalculateCost();
             UpdateUI();
@@ -52,6 +64,7 @@ namespace CodeBase.Logic.Upgrades
 
         private void OnBuy()
         {
+            Balance.Instance.DecreaseBalance(_currentBuyCost);
             Count++;
             CalculateCost();
             UpdateUI();
@@ -76,16 +89,5 @@ namespace CodeBase.Logic.Upgrades
 
         private void CalculateSellCost() => 
             _currentSellCost = Mathf.FloorToInt(_currentBuyCost / 1.5f);
-        
-        public bool GetCount(EUpgradeTypeId upgradeTypeId, out int upgradesCount)
-        {
-            upgradesCount = Count;
-            return UpgradeType == upgradeTypeId;
-        }
-
-        public bool IsExists(EUpgradeTypeId upgradeType)
-        {
-            return UpgradeType == upgradeType;
-        }
     }
 }

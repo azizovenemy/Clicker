@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using CodeBase.Data;
 using CodeBase.Infrastructure.Factory;
 using CodeBase.Infrastructure.Services.PersistentProgress;
+using CodeBase.Logic.Upgrades;
 using CodeBase.StaticData;
+using CodeBase.UserInfo;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -12,11 +14,9 @@ namespace CodeBase.Enemy
     public class EnemySpawner : MonoBehaviour, ISavedProgress
     {
         public int CurrentEnemyIndex { get; private set; }
-        public int CurrentEnemyMoneyReward;
         public GameObject CurrentEnemy { get; private set; }
 
         private EEnemyTypeId _typeId;
-        
         private IGameFactory _gameFactory;
         private EnemyDeath _enemyDeath;
 
@@ -42,11 +42,6 @@ namespace CodeBase.Enemy
             return type == 0 ? EEnemyTypeId.Sphere : EEnemyTypeId.Cube;
         }
 
-        private float CalculateReward()
-        {
-            return CurrentEnemyIndex * Constants.Increase; //* upgradesService.moneyIncrease;
-        }
-
         public void LoadProgress(PlayerProgress progress)
         {
             CurrentEnemyIndex = progress.currentEnemyData.index;
@@ -66,9 +61,19 @@ namespace CodeBase.Enemy
 
         private void OnSlain()
         {
+            Balance.Instance.IncreaseBalance(CalculateReward(CurrentEnemyIndex));
+            
             _enemyDeath.Happened -= OnSlain;
             CurrentEnemyIndex++;
             Spawn();
         }
+
+        private float CalculateReward(int index) =>
+            (Constants.Increase + (index % 5 == 0 ? index * Constants.Increase : index)) * CalculateRewardByUpgrade();
+
+        private float CalculateRewardByUpgrade() =>
+            Upgrades.Instance.FindExists(EUpgradeTypeId.MoneyRewardIncrease)
+                ? Upgrades.Instance.GetUpgradeCount(EUpgradeTypeId.MoneyRewardIncrease) * 1.54f
+                : 0.0f;
     }
 }
