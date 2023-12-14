@@ -30,7 +30,7 @@ namespace CodeBase.Enemy
         private void CreateWidgetDamageValue(float damage)
         {
             var widget = Instantiate(widgetPrefab, damageValuesContainer);
-            var maxDistance = 0.5f;
+            var maxDistance = 0.8f;
             var randomOffset = Random.insideUnitCircle * maxDistance;
             var position = damageValuesContainer.position + new Vector3(randomOffset.x, randomOffset.y, 0f);
             widget.transform.position = position;
