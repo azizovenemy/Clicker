@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyTypeId: 1
   Name: Denis
-  Prefab: {fileID: 2529305199097685566, guid: 49660f9d9921fdb488836811af5cebbd, type: 3}
-  DeathFx: {fileID: 0}
+  Prefab: {fileID: 469573452444509370, guid: 6d790d8505dcae243a5ac7453033652d, type: 3}
+  DeathFx: {fileID: 136450, guid: 75f06efdf4dffb64196a8a771986c0b8, type: 3}

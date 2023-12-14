@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LevelKey: MainScene
   EnemySpawners:
-  - Position: {x: 1.57, y: 0, z: -6.96}
+  - Position: {x: 2.33, y: 0.8, z: -1.96}

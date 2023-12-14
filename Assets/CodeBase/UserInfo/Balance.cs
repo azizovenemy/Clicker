@@ -1,6 +1,5 @@
 ﻿using CodeBase.Data;
 using CodeBase.Infrastructure.Services.PersistentProgress;
-using CodeBase.Logic.Upgrades;
 using System;
 using TMPro;
 using UnityEngine;
@@ -15,27 +14,26 @@ namespace CodeBase.UserInfo
         [SerializeField] private TMP_Text balanceText;
         
         private double _balance;
-        private string[] _reductions = { "", "K", "M", "B", "T" };
+        private readonly string[] _reductions = { "", "K", "M", "B", "T" };
 
-
-        public bool IncreaseBalance(float money)
+        public void IncreaseBalance(float money)
         {
-            //if (money <= 0) return false;
-
+            if (money <= 0) return;
+            
             _balance += money;
             UpdateUI();
-            return true;
         }
 
-        public bool DecreaseBalance(float money)
+        public void DecreaseBalance(float money)
         {
-            //if (_balance < 0 || money <= 0) return false;
-            if (_balance < 0) return false;
+            if (_balance < 0 || !IsEnough(money)) return;
 
-            _balance -= money;
+            _balance = Mathf.Clamp((float)(_balance - money), 0, Mathf.Infinity);
             UpdateUI();
-            return true;
         }
+
+        public bool IsEnough(float money) => 
+            _balance >= money;
 
         public void LoadProgress(PlayerProgress progress)
         {
@@ -49,10 +47,8 @@ namespace CodeBase.UserInfo
             progress.playerData.balance = (float)_balance;
         }
 
-        private void UpdateUI()
-        {
-            balanceText.text = $"Balance : {FormatBalance(_balance)}";
-        }
+        private void UpdateUI() => 
+            balanceText.text = $"{FormatBalance(_balance)} $";
 
         private string FormatBalance(double num)
         {

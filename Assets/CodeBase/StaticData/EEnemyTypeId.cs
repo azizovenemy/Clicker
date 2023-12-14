@@ -4,6 +4,6 @@
     {
         Cube = 0,
         Sphere = 1,
-        Capsule = 2,
+        Boss = 2,
     }
 }

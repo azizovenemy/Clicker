@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Text;
-using CodeBase.Data;
-using CodeBase.Infrastructure.Services.PersistentProgress;
+using System.Globalization;
+using CodeBase.UI;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace CodeBase.Enemy
 {
@@ -11,17 +11,32 @@ namespace CodeBase.Enemy
     {
         public event Action OnHealthChanged;
 
-        public float Current;
-        public float Max;
+        [HideInInspector] public float Current;
+        [HideInInspector] public float Max;
 
-        [SerializeField] private BaseEnemy baseEnemy;
+        [SerializeField] private Color widgetColor;
+        [SerializeField] private WidgetDamageValue widgetPrefab;
+        [SerializeField] private Transform damageValuesContainer;
 
         public void TakeDamage(float damage)
         {
             if (Current <= 0) return;
 
             Current -= damage;
+            CreateWidgetDamageValue(damage);
             OnHealthChanged?.Invoke();
+        }
+
+        private void CreateWidgetDamageValue(float damage)
+        {
+            var widget = Instantiate(widgetPrefab, damageValuesContainer);
+            var maxDistance = 0.5f;
+            var randomOffset = Random.insideUnitCircle * maxDistance;
+            var position = damageValuesContainer.position + new Vector3(randomOffset.x, randomOffset.y, 0f);
+            widget.transform.position = position;
+
+            widget.SetValue($"{damage}"); 
+            widget.SetColor(widgetColor);
         }
     }
 }

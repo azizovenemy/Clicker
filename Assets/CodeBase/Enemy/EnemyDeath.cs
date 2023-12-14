@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace CodeBase.Enemy
@@ -9,8 +10,11 @@ namespace CodeBase.Enemy
     {
         public event Action Happened;
 
-        public GameObject deathFx;
-        
+        [HideInInspector] public GameObject deathFx;
+
+        [SerializeField] private List<SkinnedMeshRenderer> meshRenderers;
+        [SerializeField] private Material deathMaterial;
+        [SerializeField] private GameObject canvas;
         [SerializeField] private EnemyHealth health;
 
         private void Start()
@@ -18,7 +22,7 @@ namespace CodeBase.Enemy
             health.OnHealthChanged += HealthChanged;
         }
 
-        private void OnDestroy() => 
+        private void OnDisable() => 
             health.OnHealthChanged -= HealthChanged;
 
         private void HealthChanged()
@@ -30,22 +34,30 @@ namespace CodeBase.Enemy
         private void OnDeath()
         {
             health.OnHealthChanged -= HealthChanged;
-            
-            //SpawnDeathFX();
+            canvas.SetActive(false);
+            SetMeshTransparent();
+            SpawnDeathFX();
             StartCoroutine(DestroyRoutine());
         }
 
         private void SpawnDeathFX()
         {
-            GameObject vfx = Instantiate(deathFx, transform.position, Quaternion.identity);
-            vfx.GetComponent<ParticleSystem>().Play();
+            var parentTransform = transform;
+            var go = Instantiate(deathFx, parentTransform.position, Quaternion.identity, parentTransform);
+            go.GetComponent<ParticleSystem>().Play();
         }
 
         private IEnumerator DestroyRoutine()
         {
-            yield return new WaitForSeconds(3);
+            yield return new WaitForSeconds(1.2f);
             Happened?.Invoke();
             Destroy(gameObject);
+        }
+
+        private void SetMeshTransparent()
+        {
+            foreach (var meshRenderer in meshRenderers)
+                meshRenderer.material = deathMaterial;
         }
     }
 }

@@ -2,7 +2,6 @@
 using CodeBase.Infrastructure.Services.PersistentProgress;
 using CodeBase.Infrastructure.Services.SaveLoad;
 using CodeBase.StaticData;
-using UnityEngine;
 
 namespace CodeBase.Infrastructure.States
 {
@@ -27,10 +26,7 @@ namespace CodeBase.Infrastructure.States
             _stateMachine.Enter<LoadLevelState, string>(Constants.MainSceneName);
         }
 
-        public void Exit()
-        {
-            Debug.Log(_progressService.Progress.ToJson());
-        }
+        public void Exit() { }
 
         private void LoadProgressOrInitNew() =>
             _progressService.Progress = _saveLoadService.LoadProgress() ?? NewProgress();
@@ -48,9 +44,9 @@ namespace CodeBase.Infrastructure.States
                     damage = 1,
                     upgradesData =
                     {
-                        new UpgradesData(EUpgradeTypeId.AutoDamageIncrease, 1),
-                        new UpgradesData(EUpgradeTypeId.PlayerDamageIncrease, 1),
-                        new UpgradesData(EUpgradeTypeId.MoneyRewardIncrease, 1)
+                        new UpgradesData(EUpgradeTypeId.AutoDamageIncrease, 0),
+                        new UpgradesData(EUpgradeTypeId.PlayerDamageIncrease, 0),
+                        new UpgradesData(EUpgradeTypeId.MoneyRewardIncrease, 0)
                     }
                 }
             };

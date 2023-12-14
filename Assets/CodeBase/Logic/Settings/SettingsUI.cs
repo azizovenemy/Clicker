@@ -1,11 +1,7 @@
 using System;
-using CodeBase.Infrastructure.Factory;
 using CodeBase.Infrastructure.Services;
 using CodeBase.Infrastructure.Services.SaveLoad;
-using CodeBase.UI;
-using UnityEditor.VersionControl;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace CodeBase.Logic.Settings
@@ -16,7 +12,9 @@ namespace CodeBase.Logic.Settings
         
         [SerializeField] private Button saveProgressButton;
         [SerializeField] private Button clearProgressButton;
-        [SerializeField] private Button listenOppenheimer;
+        [SerializeField] private Button closeGameButton;
+
+        [SerializeField] private AudioClip someSound;
         
         private ISaveLoadService _saveLoadService;
         
@@ -26,12 +24,15 @@ namespace CodeBase.Logic.Settings
             
             saveProgressButton.onClick.AddListener(SaveProgress);
             clearProgressButton.onClick.AddListener(ClearProgress);
-            listenOppenheimer.onClick.AddListener(Oppenheimer);
+            closeGameButton.onClick.AddListener(Close);
         }
 
         private void SaveProgress()
         {
             _saveLoadService.SaveProgress();
+            var audioSource = GetComponent<AudioSource>();
+            audioSource.clip = someSound;
+            audioSource.Play(0);
         }
 
         private void ClearProgress()
@@ -42,9 +43,10 @@ namespace CodeBase.Logic.Settings
             OnRemoveData?.Invoke();
         }
 
-        private void Oppenheimer()
-        {
-            Debug.Log("listening");
-        }
+        private void Close() => 
+            Application.Quit();
+
+        private void OnApplicationQuit() => 
+            _saveLoadService.SaveProgress();
     }
 }

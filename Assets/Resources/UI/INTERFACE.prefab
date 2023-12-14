@@ -35,8 +35,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 400, y: 100}
+  m_AnchoredPosition: {x: 625, y: -20}
+  m_SizeDelta: {x: 400, y: 70}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &7782068557759497999
 CanvasRenderer:
@@ -147,7 +147,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b94e81197c0646f5b0d35f6681addd3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  balance: 0
   balanceText: {fileID: 2028802188838448959}
 --- !u!1 &151348134065119993
 GameObject:
@@ -828,6 +827,7 @@ GameObject:
   - component: {fileID: 4660385920496528496}
   - component: {fileID: 4635008556414273740}
   - component: {fileID: 3775527832311799663}
+  - component: {fileID: 773473171682634799}
   m_Layer: 5
   m_Name: SettingsWindow
   m_TagString: Untagged
@@ -946,7 +946,104 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   saveProgressButton: {fileID: 6003786654796122597}
   clearProgressButton: {fileID: 7380992830589113353}
-  listenOppenheimer: {fileID: 37662843693198749}
+  closeGameButton: {fileID: 37662843693198749}
+  someSound: {fileID: 8300000, guid: fa10f374574139043bdf4b0677e5479e, type: 3}
+--- !u!82 &773473171682634799
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4913262587823362421}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 0.725
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &5306068834411416919
 GameObject:
   m_ObjectHideFlags: 0
@@ -1105,6 +1202,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baebc28872494d3d89f100793e9cc024, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  autoDamageIncreaseImage: {fileID: 21300000, guid: 441596f741836ed4b90d7fbf0de19a5a,
+    type: 3}
+  playerDamageIncreaseImage: {fileID: 21300000, guid: ac66b711812a8e14f8a51df2cad79a7c,
+    type: 3}
+  moneyRewardIncreaseImage: {fileID: 21300000, guid: b9aaebe016742b8429843d59518f7e56,
+    type: 3}
 --- !u!1 &8551455997383659271
 GameObject:
   m_ObjectHideFlags: 0
@@ -1138,7 +1241,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -32}
+  m_AnchoredPosition: {x: 0, y: -19}
   m_SizeDelta: {x: 720, y: 850}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &8674955127377458011
@@ -1154,7 +1257,7 @@ GameObject:
   - component: {fileID: 4404997523199137939}
   - component: {fileID: 37662843693198749}
   m_Layer: 5
-  m_Name: ListenCanYouHearTheMusic
+  m_Name: LeaveGame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

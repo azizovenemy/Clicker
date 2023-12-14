@@ -1,4 +1,5 @@
-﻿using CodeBase.StaticData;
+﻿using System.Text;
+using CodeBase.StaticData;
 using CodeBase.UserInfo;
 using TMPro;
 using UnityEngine;
@@ -12,19 +13,25 @@ namespace CodeBase.Logic.Upgrades
         public int Count;
 
         [SerializeField] private float startCost;
+        
+        [SerializeField] private Image mainImage;
         [SerializeField] private TMP_Text titleText;
         [SerializeField] private TMP_Text countText;
         
         [SerializeField] private Button buyButton;
         [SerializeField] private Button sellButton;
 
+        [SerializeField] private AudioClip buySound;
+        [SerializeField] private AudioClip sellSound;
+        
         private float _currentBuyCost;
         private float _currentSellCost;
 
-        public void Construct(EUpgradeTypeId upgradeType, int count)
+        public void Construct(EUpgradeTypeId upgradeType, int count, Sprite sprite)
         {
             UpgradeType = upgradeType;
             Count = count;
+            mainImage.sprite = sprite;
             
             CalculateCost();
             UpdateUI();
@@ -44,7 +51,6 @@ namespace CodeBase.Logic.Upgrades
 
         public bool GetCount(EUpgradeTypeId upgradeTypeId, out int upgradesCount)
         {
-            Debug.Log(Count);
             upgradesCount = Count;
             return UpgradeType == upgradeTypeId;
         }
@@ -59,15 +65,26 @@ namespace CodeBase.Logic.Upgrades
             Balance.Instance.IncreaseBalance(_currentSellCost);
             Count--;
             CalculateCost();
+            PlaySound(sellSound);
             UpdateUI();
         }
 
         private void OnBuy()
         {
+            if (!Balance.Instance.IsEnough(_currentBuyCost)) return;
+            
             Balance.Instance.DecreaseBalance(_currentBuyCost);
             Count++;
             CalculateCost();
+            PlaySound(buySound);
             UpdateUI();
+        }
+
+        private void PlaySound(AudioClip audioClip)
+        {
+            var source = GetComponent<AudioSource>();
+            source.clip = audioClip;
+            source.Play(0);
         }
 
         private void CalculateCost()

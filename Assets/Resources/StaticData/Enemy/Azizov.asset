@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6128454120b40cfa340a80c12d64827, type: 3}
   m_Name: Azizov
   m_EditorClassIdentifier: 
-  EnemyTypeId: 0
-  Name: Azizov
+  enemyTypeId: 0
+  Name: Said
   Prefab: {fileID: 2529305199097685566, guid: 49660f9d9921fdb488836811af5cebbd, type: 3}
-  DeathFx: {fileID: 0}
+  DeathFx: {fileID: 136450, guid: 75f06efdf4dffb64196a8a771986c0b8, type: 3}

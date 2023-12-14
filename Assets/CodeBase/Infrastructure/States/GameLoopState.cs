@@ -1,4 +1,5 @@
-﻿using CodeBase.Logic.Settings;
+﻿using CodeBase.Logic;
+using CodeBase.Logic.Settings;
 using UnityEngine;
 
 namespace CodeBase.Infrastructure.States

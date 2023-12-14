@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Shikunov
   m_EditorClassIdentifier: 
   enemyTypeId: 2
-  Name: Vaibik
-  Prefab: {fileID: 2529305199097685566, guid: 49660f9d9921fdb488836811af5cebbd, type: 3}
-  DeathFx: {fileID: 0}
+  Name: Boss
+  Prefab: {fileID: 5081453585859529972, guid: 1f1ec5946bdfe6b4386b4d47b26c13a0, type: 3}
+  DeathFx: {fileID: 136450, guid: 75f06efdf4dffb64196a8a771986c0b8, type: 3}

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using CodeBase.Data;
 using CodeBase.Infrastructure.Services.PersistentProgress;
 using CodeBase.StaticData;
@@ -12,24 +12,52 @@ namespace CodeBase.Logic.Upgrades
         public static Upgrades Instance => _instance;
         private static Upgrades _instance;
 
+        [SerializeField] private Sprite autoDamageIncreaseImage;
+        [SerializeField] private Sprite playerDamageIncreaseImage;
+        [SerializeField] private Sprite moneyRewardIncreaseImage;
+        
         private PlayerData _progress;
-
-        private readonly List<UpgradeEntity> _entities = new List<UpgradeEntity>();
+        private Dictionary<EUpgradeTypeId, Sprite> _images;
+        private readonly List<UpgradeEntity> _entities = new();
 
         public float CalculateDamagePerSecond() =>
-            FindExists(EUpgradeTypeId.PlayerDamageIncrease) ? GetUpgradeCount(EUpgradeTypeId.PlayerDamageIncrease) * 0.3f : 0f;
+            FindExists(EUpgradeTypeId.AutoDamageIncrease)
+                ? GetUpgradeCount(EUpgradeTypeId.AutoDamageIncrease) * 0.3f
+                : 0f;
 
         public float CalculateDamagePerClick() =>
-            FindExists(EUpgradeTypeId.PlayerDamageIncrease) ? GetUpgradeCount(EUpgradeTypeId.PlayerDamageIncrease) * 0.3f : 0f;
+            FindExists(EUpgradeTypeId.PlayerDamageIncrease)
+                ? GetUpgradeCount(EUpgradeTypeId.PlayerDamageIncrease) * 0.3f
+                : 0f;
 
-        public void UpdateEntityInfo(EUpgradeTypeId upgradeType)
+        public bool FindExists(EUpgradeTypeId upgradeType)
         {
+            foreach (var upgrade in _entities.Where(upgrade => upgrade.IsExists(upgradeType)))
+            {
+                upgrade.GetCount(upgradeType, out var count);
+                return count > 0;
+            }
 
+            return false;
+        }
+
+        public int GetUpgradeCount(EUpgradeTypeId upgradeType)
+        {
+            foreach (var upgrade in _entities)
+            {
+                if (upgrade.GetCount(upgradeType, out var count))
+                {
+                    return count;
+                }
+            }
+
+            return 0;
         }
 
         public void LoadProgress(PlayerProgress progress)
         {
             _progress = progress.playerData;
+            InitializeUpgradesImages();
             InstantiateUpgrades();
             CreateSingleton();
         }
@@ -38,6 +66,16 @@ namespace CodeBase.Logic.Upgrades
         {
             UpdateDictionary();
             progress.playerData = _progress;
+        }
+
+        private void InitializeUpgradesImages()
+        {
+            _images = new Dictionary<EUpgradeTypeId, Sprite>
+            {
+                { EUpgradeTypeId.AutoDamageIncrease, autoDamageIncreaseImage },
+                { EUpgradeTypeId.PlayerDamageIncrease, playerDamageIncreaseImage },
+                { EUpgradeTypeId.MoneyRewardIncrease, moneyRewardIncreaseImage },
+            };
         }
 
         private void InstantiateUpgrades()
@@ -49,7 +87,7 @@ namespace CodeBase.Logic.Upgrades
         private void InstantiateUpgrade(string path, EUpgradeTypeId upgradeType, int upgradeCount)
         {
             var upgradeEntity = Instantiate(Resources.Load<UpgradeEntity>(path), this.transform);
-            upgradeEntity.Construct(upgradeType, upgradeCount);
+            upgradeEntity.Construct(upgradeType, upgradeCount, _images[upgradeType]);
 
             _entities.Add(upgradeEntity);
         }
@@ -62,64 +100,10 @@ namespace CodeBase.Logic.Upgrades
                 _progress.upgradesData.Add(new UpgradesData(entity.UpgradeType, entity.Count));
         }
 
-        public bool FindExists(EUpgradeTypeId upgradeType)
-        {
-            foreach (UpgradeEntity upgrade in _entities)
-            {
-                if (upgrade.IsExists(upgradeType))
-                {
-                    upgrade.GetCount(upgradeType, out var count);
-                    return count > 0;
-                }
-            }
-
-            return false;
-        }
-
-        public int GetUpgradeCount(EUpgradeTypeId upgradeType)
-        {
-            foreach (UpgradeEntity upgrade in _entities)
-            {
-                if (upgrade.GetCount(upgradeType, out var count))
-                {
-                    return count;
-                }
-            }
-
-            return 0;
-        }
-
         private void CreateSingleton()
         {
             //minus vaibik
             _instance = this;
-        }
-
-        private void DebugDictionaryInfo()
-        {
-            foreach (var field in _progress.upgradesData)
-            {
-                Debug.Log($"{field.upgradeType} - {field.count}");
-            }
-        }
-
-        private void DebugAll(string upgradeType)
-        {
-            string info = "";
-
-            foreach (var entity in _entities)
-            {
-                info += $" . {entity.UpgradeType} . ";
-            }
-
-            Debug.Log(new StringBuilder()
-                .Append("Finding existing type")
-                .Append(info)
-                .Append("finding type - ")
-                .Append(upgradeType)
-                .Append(" entities list length ")
-                .Append(_entities.Count)
-            );
         }
     }
 }

@@ -1,10 +1,5 @@
-﻿using System;
-using System.Text;
-using CodeBase.Data;
-using CodeBase.Enemy;
-using CodeBase.Infrastructure.Services.PersistentProgress;
+﻿using CodeBase.Enemy;
 using CodeBase.Logic.Upgrades;
-using CodeBase.StaticData;
 using UnityEngine;
 
 namespace CodeBase.UserInfo

@@ -1,6 +1,6 @@
 ﻿using CodeBase.Infrastructure.Factory;
 using CodeBase.Infrastructure.Services.PersistentProgress;
-using UnityEngine;
+using CodeBase.Logic;
 
 namespace CodeBase.Infrastructure.States
 {

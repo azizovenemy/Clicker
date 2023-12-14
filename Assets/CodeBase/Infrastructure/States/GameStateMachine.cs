@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using CodeBase.Infrastructure.AssetManagement;
 using CodeBase.Infrastructure.Factory;
 using CodeBase.Infrastructure.Services;
 using CodeBase.Infrastructure.Services.PersistentProgress;
 using CodeBase.Infrastructure.Services.SaveLoad;
+using CodeBase.Logic;
 
 namespace CodeBase.Infrastructure.States
 {
