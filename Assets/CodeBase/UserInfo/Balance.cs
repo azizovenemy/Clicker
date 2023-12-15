@@ -42,10 +42,8 @@ namespace CodeBase.UserInfo
             CreateSingleton();
         }
 
-        public void UpdateProgress(PlayerProgress progress)
-        {
+        public void UpdateProgress(PlayerProgress progress) => 
             progress.playerData.balance = (float)_balance;
-        }
 
         private void UpdateUI() => 
             balanceText.text = $"{FormatBalance(_balance)} $";

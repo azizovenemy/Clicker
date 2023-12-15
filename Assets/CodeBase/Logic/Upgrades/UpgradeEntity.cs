@@ -1,5 +1,4 @@
-﻿using System.Text;
-using CodeBase.StaticData;
+﻿using CodeBase.StaticData;
 using CodeBase.UserInfo;
 using TMPro;
 using UnityEngine;

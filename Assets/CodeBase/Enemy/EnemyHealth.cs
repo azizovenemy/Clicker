@@ -29,6 +29,8 @@ namespace CodeBase.Enemy
 
         private void CreateWidgetDamageValue(float damage)
         {
+            if(damage <= 0) return;
+
             var widget = Instantiate(widgetPrefab, damageValuesContainer);
             var maxDistance = 0.8f;
             var randomOffset = Random.insideUnitCircle * maxDistance;

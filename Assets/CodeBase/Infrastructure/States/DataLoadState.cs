@@ -40,6 +40,7 @@ namespace CodeBase.Infrastructure.States
                 },
                 playerData =
                 {
+                    mute = true,
                     balance = 10,
                     damage = 1,
                     upgradesData =
