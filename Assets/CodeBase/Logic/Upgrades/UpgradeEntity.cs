@@ -94,8 +94,8 @@ namespace CodeBase.Logic.Upgrades
 
         private void UpdateUI()
         {
-            buyButton.GetComponentInChildren<TMP_Text>().text = $"Buy: {_currentBuyCost}";
-            sellButton.GetComponentInChildren<TMP_Text>().text = $"Sell: {_currentSellCost}";
+            buyButton.GetComponentInChildren<TMP_Text>().text = $"Buy: {Constants.FormatString(_currentBuyCost)}";
+            sellButton.GetComponentInChildren<TMP_Text>().text = $"Sell: {Constants.FormatString(_currentSellCost)}";
             titleText.text = $"{UpgradeType}";
             countText.text = Count.ToString();
         }

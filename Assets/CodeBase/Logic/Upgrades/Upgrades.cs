@@ -22,12 +22,12 @@ namespace CodeBase.Logic.Upgrades
 
         public float CalculateDamagePerSecond() =>
             FindExists(EUpgradeTypeId.AutoDamageIncrease)
-                ? GetUpgradeCount(EUpgradeTypeId.AutoDamageIncrease) * 0.3f
+                ? GetUpgradeCount(EUpgradeTypeId.AutoDamageIncrease) * 1.5f
                 : 0f;
 
         public float CalculateDamagePerClick() =>
             FindExists(EUpgradeTypeId.PlayerDamageIncrease)
-                ? GetUpgradeCount(EUpgradeTypeId.PlayerDamageIncrease) * 0.3f
+                ? GetUpgradeCount(EUpgradeTypeId.PlayerDamageIncrease)
                 : 0f;
 
         public bool FindExists(EUpgradeTypeId upgradeType)

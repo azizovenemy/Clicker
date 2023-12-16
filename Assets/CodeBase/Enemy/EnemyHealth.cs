@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Globalization;
 using CodeBase.UI;
+using CodeBase.UserInfo;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -11,8 +11,8 @@ namespace CodeBase.Enemy
     {
         public event Action OnHealthChanged;
 
-        [HideInInspector] public float Current;
-        [HideInInspector] public float Max;
+        public float Current { get; set; }
+        public float Max { get; set; }
 
         [SerializeField] private Color widgetColor;
         [SerializeField] private WidgetDamageValue widgetPrefab;
@@ -37,7 +37,7 @@ namespace CodeBase.Enemy
             var position = damageValuesContainer.position + new Vector3(randomOffset.x, randomOffset.y, 0f);
             widget.transform.position = position;
 
-            widget.SetValue($"{damage}"); 
+            widget.SetValue(Constants.FormatString(damage)); 
             widget.SetColor(widgetColor);
         }
     }

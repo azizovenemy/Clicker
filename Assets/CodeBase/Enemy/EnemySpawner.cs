@@ -21,7 +21,7 @@ namespace CodeBase.Enemy
         public void Construct(IGameFactory gameFactory)
         {
             _gameFactory = gameFactory;
-            
+
             Spawn();
         }
 
@@ -33,10 +33,10 @@ namespace CodeBase.Enemy
             return type == 0 ? EEnemyTypeId.Sphere : EEnemyTypeId.Cube;
         }
 
-        public void LoadProgress(PlayerProgress progress) => 
+        public void LoadProgress(PlayerProgress progress) =>
             _currentEnemyIndex = progress.currentEnemyData.index;
 
-        public void UpdateProgress(PlayerProgress progress) => 
+        public void UpdateProgress(PlayerProgress progress) =>
             progress.currentEnemyData.index = _currentEnemyIndex;
 
         private void Spawn()
@@ -50,18 +50,19 @@ namespace CodeBase.Enemy
         private void OnSlain()
         {
             Balance.Instance.IncreaseBalance(CalculateReward(_currentEnemyIndex));
-            
+
             _enemyDeath.Happened -= OnSlain;
             _currentEnemyIndex++;
             Spawn();
         }
 
         private float CalculateReward(int index) =>
-            (Constants.Increase + (index % 5 == 0 ? index * Constants.Increase : index)) + CalculateRewardByUpgrade();
+            (index % 5 == 0 ? index * (Constants.Increase * 0.5f) : index * 1.5f) +
+            CalculateRewardByUpgrade() * (index * 0.5f);
 
         private float CalculateRewardByUpgrade() =>
             Upgrades.Instance.FindExists(EUpgradeTypeId.MoneyRewardIncrease)
-                ? Upgrades.Instance.GetUpgradeCount(EUpgradeTypeId.MoneyRewardIncrease) * 1.54f
+                ? Upgrades.Instance.GetUpgradeCount(EUpgradeTypeId.MoneyRewardIncrease)
                 : 0f;
     }
 }
