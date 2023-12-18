@@ -21,6 +21,6 @@ namespace CodeBase.Enemy
         }
 
         public float CalculateMaxHealth(int index) => 
-            index == 0 ? Constants.Increase : Constants.Increase * (index % 5 == 0 ? index * Constants.Increase : index);
+            index == 0 ? Constants.Increase : Constants.Increase * (index % 5 == 0 ? index * 2f : index);
     }
 }
